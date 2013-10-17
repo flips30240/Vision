@@ -3,10 +3,11 @@ package Core;
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
+
+import World.createWorld;
 
 public class Main extends SimpleApplication {
 
@@ -17,6 +18,11 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        this.createBox();
+        createWorld world = new createWorld("test");
+    }
+    
+    public void createBox(){
         Box b = new Box(1, 1, 1);
         Geometry geom = new Geometry("Box", b);
 
