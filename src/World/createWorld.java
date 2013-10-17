@@ -6,5 +6,6 @@ public class createWorld {
     
     public createWorld(String name){
         System.out.println(name);
+        handleWorldConfig confighandler = new handleWorldConfig();
     }
 }
