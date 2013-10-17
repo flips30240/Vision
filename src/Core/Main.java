@@ -8,11 +8,16 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
 
 import World.createWorld;
+import com.jme3.system.AppSettings;
 
 public class Main extends SimpleApplication {
 
     public static void main(String[] args) {
+        AppSettings settings = new AppSettings(true);
+        settings.setResolution(1440,780);
         Main app = new Main();
+        app.setSettings(settings);
+        app.setShowSettings(false);
         app.start();
     }
 
