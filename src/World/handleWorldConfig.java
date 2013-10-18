@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class handleWorldConfig {
+public final class handleWorldConfig {
     
     public handleWorldConfig(){
         this.checkForConfigFile();
