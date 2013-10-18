@@ -24,7 +24,10 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         this.createBox();
-        createWorld world = new createWorld("test");
+        //temp for viewing terrain better
+        flyCam.setMoveSpeed(20);
+        //you need to pass things like assetmanaber and rootnode =/
+        createWorld world = new createWorld("test", assetManager, rootNode);
     }
     
     public void createBox(){

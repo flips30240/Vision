@@ -6,17 +6,20 @@ package World;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+import com.jme3.asset.AssetManager;
+import com.jme3.scene.Node;
 
 public class createWorld {
     int sizeX;
     int sizeY;
     int sizeZ;
     
-    public createWorld(String name){
+    public createWorld(String name, AssetManager asset, Node root){
         System.out.println(name);
         handleWorldConfig confighandler = new handleWorldConfig();
         this.loadProps();
-        createTerrain terrain = new createTerrain(sizeX, sizeY, sizeZ);
+        createTerrain terrain = new createTerrain(sizeX, sizeY, sizeZ, 
+                asset, root);
     }
     
     public void loadProps(){
