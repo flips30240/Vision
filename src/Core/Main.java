@@ -23,23 +23,10 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        this.createBox();
         //temp for viewing terrain better
-        flyCam.setMoveSpeed(20);
+        flyCam.setMoveSpeed(40);
         //you need to pass things like assetmanaber and rootnode =/
         createWorld world = new createWorld("test", assetManager, rootNode);
-    }
-    
-    public void createBox(){
-        Box b = new Box(1, 1, 1);
-        Geometry geom = new Geometry("Box", b);
-
-        Material mat = new Material(assetManager, 
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Blue);
-        geom.setMaterial(mat);
-
-        rootNode.attachChild(geom);
     }
 
     @Override

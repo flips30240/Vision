@@ -28,7 +28,9 @@ public final class handleWorldConfig {
     }
         else{
             for (int i = 0; i < listOfFiles.length; i++){
+                //iterate through all the files
                 if (listOfFiles[i].isFile()){
+                    //get the names of the files
                     files = listOfFiles[i].getName();
 
                     if (files.equals("World.properties")){
@@ -46,6 +48,7 @@ public final class handleWorldConfig {
     }
     
     public void createPropertiesFile(){
+        //create a default properties file for world
         Properties props = new Properties();
         try{
             props.setProperty("sizeX", "100");
