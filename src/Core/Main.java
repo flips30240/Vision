@@ -24,7 +24,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         //temp for viewing terrain better
-        flyCam.setMoveSpeed(40);
+        flyCam.setMoveSpeed(500);
         //you need to pass things like assetmanaber and rootnode =/
         createWorld world = new createWorld("test", assetManager, rootNode);
     }
