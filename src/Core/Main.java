@@ -23,6 +23,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        //commit test
         //temp for viewing terrain better
         flyCam.setMoveSpeed(500);
         //you need to pass things like assetmanaber and rootnode =/
