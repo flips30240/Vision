@@ -4,6 +4,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Quad;
 import com.jme3.asset.AssetManager;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -124,7 +125,9 @@ public class createTerrain {
                 int newX = (int)tempX;
                 int finalX = x + newX;
                 int newY = (0-i) + y;
-                this.createBox(finalX, newY, 0, "Green", asset, root);
+                for(int g = 0; g <= 7; g++){
+                    this.createBox(finalX + g, newY, 0, "Green", asset, root);
+                }
                 if(ran.nextInt(700) == 100){
                     this.makeCaveBranch(finalX, newY, ran.nextInt(600), 
                             asset, root);
@@ -146,7 +149,9 @@ public class createTerrain {
                     int newY = (int)tempY;
                     int finalY = y + newY;
                     int newX = x + j;
-                    this.createBox(newX, finalY, 0, "Red", asset, root);
+                    for(int g = 0; g <= 7; g++){
+                        this.createBox(newX, finalY + g, 0, "Green", asset, root);
+                    }
                     if(ran.nextInt(200) == 5){
                         if(iterationCount <= 200){
                             iterationCount += 1;
@@ -164,7 +169,9 @@ public class createTerrain {
                 int newY = (int)tempY;
                 int finalY = y + newY;
                 int newX = x - j;
-                this.createBox(newX, finalY, 0, "Red", asset, root);
+                for(int g = 0; g <= 7; g++){
+                        this.createBox(newX, finalY + g, 0, "Green", asset, root);
+                    }
                 if(ran.nextInt(200) == 5){
                     if(iterationCount <= 200){
                         iterationCount += 1;
@@ -181,8 +188,10 @@ public class createTerrain {
     public void createBox(int x, int y, int z, String color, AssetManager assetManager, 
             Node root){
         //create a box and place it at x, y
-        Box b = new Box((float)0.5, (float)0.5, (float)0.5);
-        Geometry geom = new Geometry("Box", b);
+        //Box b = new Box((float)0.5, (float)0.5, (float)0.5);
+        //create a quad
+        Quad b = new Quad((float)1.0, (float)1.0);
+        Geometry geom = new Geometry("Quad", b);
         geom.setLocalTranslation(new Vector3f(x, y, z));
 
         Material mat = new Material(assetManager, 

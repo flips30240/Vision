@@ -9,6 +9,7 @@ import com.jme3.scene.shape.Box;
 
 import World.createWorld;
 import com.jme3.system.AppSettings;
+import jme3tools.optimize.GeometryBatchFactory;
 
 public class Main extends SimpleApplication {
 
