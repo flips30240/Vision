@@ -12,11 +12,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.Random;
 
 
 public class createTerrain {
     
     Properties props = new Properties();
+    Random ran = new Random();
+    PerlinNoise noise = new PerlinNoise();
+    int iterationCount= 0;
     ArrayList<String> surfaceArrayY = new ArrayList<String>();
     ArrayList<String> surfaceArrayX = new ArrayList<String>();
     
@@ -26,11 +30,16 @@ public class createTerrain {
         System.out.println(Integer.toString(x) + " " + Integer.toString(y) 
                 + " " + Integer.toString(z));
         //creates the first layer of terrain
-        this.makeNoiseTerrain(x, y, z, asset, root);
+        this.makeSurface(x, y, z, asset, root);
         //just to see my stupid long arrayLists
         //System.out.println(surfaceArrayY);
         //System.out.println(surfaceArrayX);
         this.modifyProps(x, y, z);
+        this.fillBelowSurface();
+    }
+    
+    public void fillBelowSurface(){
+        
     }
     
     public void modifyProps(int x, int y, int z){
@@ -52,8 +61,8 @@ public class createTerrain {
             System.out.println(sX.toString());
             System.out.println(sY.toString());
             
-            props.setProperty("sizeX", "1000");
-            props.setProperty("sizeY", "1");
+            props.setProperty("sizeX", "10000");
+            props.setProperty("sizeY", "1000");
             props.setProperty("sizeZ", "1");
             props.setProperty("SurfaceX", sX.toString());
             props.setProperty("SurfaceY", sY.toString());
@@ -66,17 +75,14 @@ public class createTerrain {
         }
     }
     
-    public void makeNoiseTerrain(int x, int y, int z, 
+    public void makeSurface(int x, int y, int z, 
             AssetManager asset, Node root){
-        //init an instance of random
-        //FastNoise noise = new FastNoise();
-        PerlinNoise noise = new PerlinNoise();
         //noise along the x axis
         float[][] finalnoise = noise.GeneratePerlinNoise
-                (noise.genWhiteNoise(x, y), 8, (float) 0.1);
+                (noise.genWhiteNoise(x, 1), 8, (float) 0.1);
         //noise along the y axis - adds a little bit of overhangs
         float[][] testnoise = noise.GeneratePerlinNoise
-                (noise.genWhiteNoise(y, x), 6, (float) 0.1);
+                (noise.genWhiteNoise(1, x), 6, (float) 0.1);
         
         //iterate through the creation of blocks for the length of the world
         for(int i = 0; i <= finalnoise.length - 1; i++){
@@ -89,7 +95,13 @@ public class createTerrain {
                 int newX = (int)testY + j;
                 int newY = (int)tempY + i;
                 //PerlinNoise is actually height, width so j is x i is y lol
-                this.createBox(newX, newY, 0, asset, root);
+                this.createBox(newX, newY, 0, "Blue", asset, root);
+                
+                if(ran.nextInt(200) == 4){
+                    if(newY <= 10 || newY >= 70){
+                        this.makeCave(newX, newY, ran.nextInt(600), asset, root);
+                    }
+                }
                 //System.out.println("x: " + newX + " y: " + newY);
                 //append the x and y coords to an arraylist
                 surfaceArrayX.add(Integer.toString(newX));
@@ -98,7 +110,75 @@ public class createTerrain {
         }
     }
     
-    public void createBox(int x, int y, int z, AssetManager assetManager, 
+    public void makeCave(int x, int y, int endY, AssetManager asset, Node root){
+        System.out.println("This is a cave!");
+        //total dustance from surface to bottom of world
+        int distY = y + endY;
+        //generate the perlinNoise for the cave path
+        float[][] testnoise = noise.GeneratePerlinNoise
+                (noise.genWhiteNoise(1, distY), 5, (float) 0.2);
+        
+        for(int i = 0; i <= testnoise.length - 1; i++){
+            for(int j = 0; j <= testnoise[i].length - 1; j++){
+                float tempX = testnoise[i][j] * 40;
+                int newX = (int)tempX;
+                int finalX = x + newX;
+                int newY = (0-i) + y;
+                this.createBox(finalX, newY, 0, "Green", asset, root);
+                if(ran.nextInt(700) == 100){
+                    this.makeCaveBranch(finalX, newY, ran.nextInt(600), 
+                            asset, root);
+                }
+            }
+        }
+    }
+    
+    public void makeCaveBranch(int x, int y, int endX, 
+            AssetManager asset, Node root){
+        System.out.println("mmmm");
+        //generate the perlinNoise for the cave path
+        float[][] testnoise = noise.GeneratePerlinNoise
+                (noise.genWhiteNoise(endX, 1), 5, (float) 0.2);
+        if(ran.nextInt(99) >= 45){
+            for(int i = 0; i <= testnoise.length - 1; i++){
+                for(int j = 0; j <= testnoise[i].length - 1; j++){
+                    float tempY = testnoise[i][j] * 40;
+                    int newY = (int)tempY;
+                    int finalY = y + newY;
+                    int newX = x + j;
+                    this.createBox(newX, finalY, 0, "Red", asset, root);
+                    if(ran.nextInt(200) == 5){
+                        if(iterationCount <= 200){
+                            iterationCount += 1;
+                            System.out.println(newX + " " + newY);
+                            this.makeCave(newX, finalY, 800, 
+                                    asset, root);
+                        }
+                    }
+                    }
+                }
+        }else{
+            for(int i = 0; i <= testnoise.length - 1; i++){
+            for(int j = 0; j <= testnoise[i].length - 1; j++){
+                float tempY = testnoise[i][j] * 40;
+                int newY = (int)tempY;
+                int finalY = y + newY;
+                int newX = x - j;
+                this.createBox(newX, finalY, 0, "Red", asset, root);
+                if(ran.nextInt(200) == 5){
+                    if(iterationCount <= 200){
+                        iterationCount += 1;
+                        System.out.println(newX + " " + newY);
+                        this.makeCave(newX, finalY, 800, 
+                                asset, root);
+                    }
+                }
+                }
+            }
+        }
+        }
+    
+    public void createBox(int x, int y, int z, String color, AssetManager assetManager, 
             Node root){
         //create a box and place it at x, y
         Box b = new Box((float)0.5, (float)0.5, (float)0.5);
@@ -107,7 +187,13 @@ public class createTerrain {
 
         Material mat = new Material(assetManager, 
                 "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Blue);
+        if(color == "Blue"){
+            mat.setColor("Color", ColorRGBA.Blue);
+        }else if(color == "Green"){
+            mat.setColor("Color", ColorRGBA.Green);
+        }else if(color == "Red"){
+            mat.setColor("Color", ColorRGBA.Red);
+        }
         geom.setMaterial(mat);
 
         root.attachChild(geom);

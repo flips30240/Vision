@@ -51,8 +51,8 @@ public final class handleWorldConfig {
         //create a default properties file for world
         Properties props = new Properties();
         try{
-            props.setProperty("sizeX", "1000");
-            props.setProperty("sizeY", "1");
+            props.setProperty("sizeX", "10000");
+            props.setProperty("sizeY", "1000");
             props.setProperty("sizeZ", "1");
             
             props.store(new FileOutputStream("./assets/Config/"
