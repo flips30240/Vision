@@ -24,6 +24,8 @@ public class createTerrain {
     int iterationCount= 0;
     ArrayList<String> surfaceArrayY = new ArrayList<String>();
     ArrayList<String> surfaceArrayX = new ArrayList<String>();
+    ArrayList<String> caveCoordsX = new ArrayList<String>();
+    ArrayList<String> caveCoordsY = new ArrayList<String>();
     
 
     //create the basic terrain with caves/dungeons/trees/resources here
@@ -47,6 +49,7 @@ public class createTerrain {
         try{
             props.load(new FileInputStream("./assets/Config/"
                     + "World.properties"));
+            
             StringBuilder sX = new StringBuilder();
             for(String s : surfaceArrayX){
                 sX.append(s);
@@ -59,14 +62,31 @@ public class createTerrain {
                 sY.append(",");
             }
             
+            StringBuilder caveX = new StringBuilder();
+            for(String s : caveCoordsX){
+                caveX.append(s);
+                caveX.append(",");
+            }
+            StringBuilder caveY = new StringBuilder();
+            
+            for(String s : caveCoordsY){
+                caveY.append(s);
+                caveY.append(",");
+            }
+            
             System.out.println(sX.toString());
             System.out.println(sY.toString());
+            System.out.println(caveX.toString());
+            System.out.println(caveY.toString());
             
             props.setProperty("sizeX", "10000");
             props.setProperty("sizeY", "1000");
             props.setProperty("sizeZ", "1");
             props.setProperty("SurfaceX", sX.toString());
             props.setProperty("SurfaceY", sY.toString());
+            props.setProperty("caveCoordsX", caveX.toString());
+            props.setProperty("caveCoordsY", caveY.toString());
+            
             
             props.store(new FileOutputStream("./assets/Config/"
                     + "World.properties"), null);
@@ -119,18 +139,61 @@ public class createTerrain {
         float[][] testnoise = noise.GeneratePerlinNoise
                 (noise.genWhiteNoise(1, distY), 5, (float) 0.2);
         
-        for(int i = 0; i <= testnoise.length - 1; i++){
-            for(int j = 0; j <= testnoise[i].length - 1; j++){
-                float tempX = testnoise[i][j] * 40;
-                int newX = (int)tempX;
-                int finalX = x + newX;
-                int newY = (0-i) + y;
-                for(int g = 0; g <= 7; g++){
-                    this.createBox(finalX + g, newY, 0, "Green", asset, root);
+        if(ran.nextInt(100) >= 33){
+            for(int i = 0; i <= testnoise.length - 1; i++){
+                for(int j = 0; j <= testnoise[i].length - 1; j++){
+                    float tempX = testnoise[i][j] * 40;
+                    int newX = (int)tempX;
+                    int finalX = x + newX;
+                    int newY = (0-i) + y;
+                    for(int g = 0; g <= 7; g++){
+                        this.createBox(finalX + g, newY, 0, "Green", asset, 
+                                root);
+                        caveCoordsX.add(Integer.toString(finalX + g));
+                        caveCoordsY.add(Integer.toString(newY));
+                    }
+                    if(ran.nextInt(700) == 100){
+                        this.makeCaveBranch(finalX, newY, ran.nextInt(600), 
+                                asset, root);
+                    }
                 }
-                if(ran.nextInt(700) == 100){
-                    this.makeCaveBranch(finalX, newY, ran.nextInt(600), 
-                            asset, root);
+            }
+        }else if(ran.nextInt(100)>= 66){
+            for(int i = 0; i <= testnoise.length - 1; i++){
+                for(int j = 0; j <= testnoise[i].length - 1; j++){
+                    float tempX = testnoise[i][j] * 40;
+                    int newX = (int)tempX;
+                    int finalX = x + newX;
+                    int newY = (0-i) + y;
+                    for(int g = 0; g <= 7; g++){
+                        this.createBox(finalX + g + i, newY, 0, "Green", asset, 
+                                root);
+                        caveCoordsX.add(Integer.toString(finalX + g + i));
+                        caveCoordsY.add(Integer.toString(newY));
+                    }
+                    if(ran.nextInt(700) == 100){
+                        this.makeCaveBranch(finalX, newY, ran.nextInt(600), 
+                                asset, root);
+                    }
+                }
+            }
+        }else{
+            for(int i = 0; i <= testnoise.length - 1; i++){
+                for(int j = 0; j <= testnoise[i].length - 1; j++){
+                    float tempX = testnoise[i][j] * 40;
+                    int newX = (int)tempX;
+                    int finalX = x + newX;
+                    int newY = (0-i) + y;
+                    for(int g = 0; g <= 7; g++){
+                        this.createBox(finalX + g - i, newY, 0, "Green", asset, 
+                                root);
+                        caveCoordsX.add(Integer.toString(finalX + g - i));
+                        caveCoordsY.add(Integer.toString(newY));
+                    }
+                    if(ran.nextInt(700) == 100){
+                        this.makeCaveBranch(finalX, newY, ran.nextInt(600), 
+                                asset, root);
+                    }
                 }
             }
         }
@@ -150,7 +213,10 @@ public class createTerrain {
                     int finalY = y + newY;
                     int newX = x + j;
                     for(int g = 0; g <= 7; g++){
-                        this.createBox(newX, finalY + g, 0, "Green", asset, root);
+                        this.createBox(newX, finalY + g, 0, "Green", asset, 
+                                root);
+                        caveCoordsX.add(Integer.toString(newX));
+                        caveCoordsY.add(Integer.toString(finalY + g));
                     }
                     if(ran.nextInt(200) == 5){
                         if(iterationCount <= 200){
@@ -170,7 +236,11 @@ public class createTerrain {
                 int finalY = y + newY;
                 int newX = x - j;
                 for(int g = 0; g <= 7; g++){
-                        this.createBox(newX, finalY + g, 0, "Green", asset, root);
+                        this.createBox(newX, finalY + g, 0, "Green", asset, 
+                                root);
+                        caveCoordsX.add(Integer.toString(newX));
+                        caveCoordsY.add(Integer.toString(finalY + g));
+                        
                     }
                 if(ran.nextInt(200) == 5){
                     if(iterationCount <= 200){
@@ -185,8 +255,8 @@ public class createTerrain {
         }
         }
     
-    public void createBox(int x, int y, int z, String color, AssetManager assetManager, 
-            Node root){
+    public void createBox(int x, int y, int z, String color, 
+            AssetManager assetManager, Node root){
         //create a box and place it at x, y
         //Box b = new Box((float)0.5, (float)0.5, (float)0.5);
         //create a quad
